@@ -5,6 +5,8 @@ using namespace std;
 
 int currentPop = 325766246;
 
+int pos [] = {0,0};
+
 int CalculatePop(int daysElapsed) {
     float secondsElapsed = daysElapsed * 24 * 60 * 60;
     long newPop = currentPop + secondsElapsed/8.0 - secondsElapsed/12.0 + secondsElapsed/33.0;
@@ -25,18 +27,21 @@ int Turn(bool change, int dir) {
             dir-= 4;
         }
     }
+    return dir;
 }
-void Move(int* pos, int dir) {
+void Move(int dir) {
     if (dir == 0) {
-        cout << "\n" << *(++pos);
-        ++(*(++pos));//north
-        cout << "\n" << *(++pos);
+        pos[1]++;
+        //++(*(++pos));//north
     } else if (dir == 1) {
-        *(pos)++;//east
+        pos[0]--;
+        //*(pos)++;//east
     } else if (dir == 2) {
-        *(++pos)--;//south
+        pos[1]--;
+        //*(++pos)--;//south
     } else if (dir == 3) {
-        *(pos)--;//west
+        pos[0]++;
+        //*(pos)--;//west
     }
 
     return;
@@ -105,56 +110,88 @@ int main() {
     }
     cout << "You have finished the adventure game!";
 
-    cout << "\n7.)Welcome to robot treasure hunt! Bob the bot will find the treasure, no matter what!\nPress any key to have bob start navigating!\n";
+    cout << "\n7.)Welcome to robot treasure hunt! Bob the bot will find the treasure, no matter what!\n";
     cin.ignore();
-    /*
-    y - treasure
-    1w - move forward
-    2b - turn left then move
-    3g - turn right then move
-    4p - turn 180 then move twice
-    5y - end
-    */
-    int pos [] = {0,0};
     int dir = 0;
     //0 = n 1 = e 2 = s 3 = w
     int maze [4][4] =
     {
-        {1,5,4,1},
-        {5,2,2,5},
+        {1,3,4,1},
+        {1,2,2,5},
         {3,1,1,3},
         {3,1,3,4}
     };
 
-    while (maze[pos[0]][pos[1]] != 5) {
+    cout << "\nThe maze is printed below\nBob will start in the top left corner, facing to the right\n\n5 (yellow)- treasure\n1 (white)- move forward\n2 (blue)- turn left then move\n3 (green)- turn right then move\n4 (black)- turn 180 then move twice\nB - The location of Bob the Robot";
+
+
+    cout << "\n\n";
+
+    for (int i=0;i< sizeof(maze)/sizeof(*maze) ;i++) {
+        for (int j=0;j<sizeof(maze[0])/sizeof(*maze[0]);j++) {
+
+            if (i==pos[0] && j==pos[1]) {
+                cout << "B";
+            } else {
+                cout << maze[i][j];
+            }
+
+            if (j == sizeof(maze[0])/sizeof(*maze[0]) - 1) {
+                cout << "\n";
+            } else {
+                cout << ", ";
+            }
+        }
+    }
+
+    cout << "\nPress any key to have bob move a step forward\n";
+    cin.ignore();
+
+    while ((int) maze[pos[0]][pos[1]] != 5) {
 
         switch (maze[pos[0]][pos[1]]) {
-        case 5:
-            cout << "Bob found the treasure! Game is over!";
-            break;
         case 1:
-            cout << "Bob stepped on a white tile, and moves forward";
-            Move(pos,dir);
+            cout << "Bob stepped on a white tile, and moves forward\n";
+            Move(dir);
             break;
         case 2:
-            cout << "Bob steps on a blue tile, turns left and moves forward";
+            cout << "Bob steps on a blue tile, turns left and moves forward\n";
             dir = Turn(false,dir);
-            Move(pos,dir);
+            Move(dir);
             break;
         case 3:
+            cout << "Bob steps on a green tile, turns right and moves forward\n";
             dir = Turn(true,dir);
-            cout << "Bob steps on a blue tile, turns right and moves forward";
-            Move(pos,dir);
+            Move(dir);
             break;
         case 4:
-            cout << "Bob steps on a black tile, turns twice and moves forward twice";
+            cout << "Bob steps on a black tile, turns twice and moves forward twice\n";
             dir = Turn(false,dir);
             dir = Turn(false,dir);
-            Move(pos,dir);
-            Move(pos,dir);
+            Move(dir);
+            Move(dir);
             break;
         }
-        cout << "\n" << pos[1] << pos[0];
+
+        for (int i=0;i< sizeof(maze)/sizeof(*maze) ;i++) {
+        for (int j=0;j<sizeof(maze[0])/sizeof(*maze[0]);j++) {
+
+            if (i==pos[0] && j==pos[1]) {
+                cout << "B";
+            } else {
+                cout << maze[i][j];
+            }
+
+            if (j == sizeof(maze[0])/sizeof(*maze[0]) - 1) {
+                cout << "\n";
+            } else {
+                cout << ", ";
+            }
+        }
+    }
+    cout << "x:" << pos[0] << ", y:" << pos[1] << "\n";
+
         cin.ignore();
     }
+    cout << "Bob found the treasure! Game is over!";
 }
