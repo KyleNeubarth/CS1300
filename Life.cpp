@@ -9,6 +9,8 @@ int height;
 
 int* pGrid;
 
+bool inputType;
+
 int Search(int x, int y) {
     if (x > width-1) {
         x -= width;
@@ -114,10 +116,26 @@ void DrawGrid() {
 }
 
 int RunLife() {
-    cout << "■Enter width of the grid:";
+    cout << "Enter width of the grid:";
     cin >> width;
     cout << "Enter height of the grid:";
     cin >> height;
+
+    if (width < 1) {
+        width = 1;
+    }
+    if (height < 1) {
+        height = 1;
+    }
+
+    char input;
+    cout << "Type \"a\" for regular runTime or \"b\" to manually increment frames. Enter to increment\n";
+    cin >> input;
+    if (input == 'a') {
+        inputType = true;
+    } else if (input == 'b') {
+        inputType = false;
+    }
 
     int grid[width][height];
     pGrid = grid[0];
@@ -127,14 +145,19 @@ int RunLife() {
         }
     }
 
-    cin.ignore();
+    if (!inputType) {
+        cin.ignore();
+    }
 
     bool running = true;
     while (running) {
         DrawGrid();
         DoTick();
-        cin.ignore();
-        //usleep(1000);//unistd
+        if (!inputType) {
+            cin.ignore();
+        } else {
+            usleep(500000);//unistd
+        }
     }
     return 0;
 }
