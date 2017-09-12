@@ -9,6 +9,22 @@ int height;
 
 int* pGrid;
 
+int Search(int x, int y) {
+    if (x > width-1) {
+        x -= width;
+    }
+    if (x < 0) {
+        x += width;
+    }
+    if (y > height-1) {
+        y -= height;
+    }
+    if (y < 0) {
+        y += height;
+    }
+    return *(pGrid+x*height+y);
+}
+
 void DoTick() {
 
     int newGrid[width][height];
@@ -21,57 +37,50 @@ void DoTick() {
     for (int i=0;i<width;i++) {
         for (int j=0;j<height;j++) {
 
-            bool sides[] = {false,false,false,false};
+            bool sides[] = {false,false,false,false,false,false,false,false};
             //up
-            if (j-1 > -1) {
-                if (*(pGrid+i*height+j-1) == 1)  {
+            if (Search(i,j-1) == 1) {
                 sides[0] = true;
-                }
-            } else {
-                if (*(pGrid+i*height+j-1+height) == 1)  {
-                sides[0] = true;
-                }
+            }
+            //up,right
+            if (Search(i+1,j-1) == 1) {
+                sides[1] = true;
             }
             //right
-            if (i+1 < width) {
-                if (*(pGrid+(i+1)*height+j) == 1)  {
-                sides[1] = true;
-                }
-            } else {
-                if (*(pGrid+(i+1-width)*height+j) == 1)  {
-                sides[1] = true;
-                }
+            if (Search(i+1,j) == 1) {
+                sides[2] = true;
+            }
+            //down,right
+            if (Search(i+1,j+1) == 1) {
+                sides[3] = true;
             }
             //down
-            if (j+1 < height) {
-                if (*(pGrid+i*height+j+1) == 1)  {
-                sides[2] = true;
-                }
-            } else {
-                if (*(pGrid+i*height+j+1-height) == 1)  {
-                sides[0] = true;
-                }
+            if (Search(i,j+1) == 1) {
+                sides[4] = true;
+            }
+            //down,left
+            if (Search(i-1,j+1) == 1) {
+                sides[5] = true;
             }
             //left
-            if (i-1 > -1) {
-                if (*(pGrid+(i-1)*height+j) == 1)  {
-                sides[3] = true;
-                }
-            } else {
-                if (*(pGrid+(i-1+width)*height+j) == 1)  {
-                sides[1] = true;
-                }
+            if (Search(i-1,j) == 1) {
+                sides[6] = true;
+            }
+            //up,left
+            if (Search(i-1,j-1) == 1) {
+                sides[7] = true;
             }
 
             int num = 0;
-            for (int k=0;k<4;k++) {
+            for (int k=0;k<8;k++) {
                 if (sides[k]) {
                     num++;
                 }
             }
             //if cell is living
             if (*(pGrid+i*height+j) == 1) {
-                if (num > 1 && num < 4) {
+                //cout << i <<""<<j<<": " << sides[0] << sides[1] << sides[2] << sides[3] << sides[4] << sides[5] << sides[6] << sides[7] << "\n";
+                if (num >= 2 && num < 4) {
                     newGrid[i][j] = 1;
                 }
             //if cell is dead
@@ -83,13 +92,8 @@ void DoTick() {
         }
     }
     for (int i=0;i<width*height;i++) {
-        //int * pNew = newGrid[0];
         *(pGrid+i) = *(newGrid[0]+i);
     }
-}
-
-void coordsToIndex(int x, int y) {
-
 }
 
 void DrawGrid() {
@@ -122,11 +126,8 @@ int RunLife() {
             grid[i][j] = rand() % 2;
         }
     }
-    /*grid[0][1] = 1;
-    grid[1][0] = 1;
-    grid[1][1] = 1;
-    grid[width-1][0] = 1;
-    grid[width-1][2] = 1;*/
+
+    cin.ignore();
 
     bool running = true;
     while (running) {
@@ -134,8 +135,6 @@ int RunLife() {
         DoTick();
         cin.ignore();
         //usleep(1000);//unistd
-
     }
-
     return 0;
 }
