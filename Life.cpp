@@ -156,7 +156,7 @@ int RunLife() {
         if (!inputType) {
             cin.ignore();
         } else {
-            usleep(500000);//unistd
+            usleep(250000);//unistd
         }
     }
     return 0;
