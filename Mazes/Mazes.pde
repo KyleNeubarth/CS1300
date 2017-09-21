@@ -123,6 +123,9 @@ void keyPressed(){
   if (key == 'x') {
     Zoom(1.01f);
   }
+  if (key == 'z') {
+    Zoom(.99f);
+  }
   if (key == 'a') {
     zoom+=0.01f;
     print(zoom+"\n");
