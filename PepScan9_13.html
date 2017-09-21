@@ -1,0 +1,151 @@
+<!doctype>
+<html>
+<head>
+<title>Pepscan</title>
+</head>
+<body>
+    <h2>
+    Pep Band Flipbook Checkout
+    </h2>
+    
+    <p id="intro">
+    .To check out a book, scan your student id and then the barcode of the book<br>
+    .To return a book, scan it or type in its name<br>
+    .Text is not case sensitive<br>
+    .you can execute special commands by typing them in and pressing enter, type 'help'
+    </p>
+    
+    <p id="topText">
+    Scan your student ID or type it in here:
+    </p>
+
+    <input type="text" id = "input" name="student id"  onKeyUp="ReadInput(this.value.toLowerCase())" onchange="ReadInputCommand(this.value.toLowerCase())" style="font-size:25px"><br>
+
+    <p>books list:</p> 
+    
+    <p id="bookList">    
+    </p>   
+</body>
+
+    <script>
+        
+        textBox = document.getElementById("input");
+        topText = document.getElementById("topText");
+        bookList = document.getElementById("bookList");
+        var storedId = "";
+        textBox.size = "20";
+        topText.setAttribute('style', 'white-space: pre;');
+        
+        
+        if (typeof(Storage) == "undefined") {
+            document.getElementById("intro").style.color = "red";
+            document.getElementById("intro").innerHTML = "YOUR BROWSER DOES NOT SUPPORT LOCAL STORAGE, ENTER AT OWN RISK";
+        }
+        if (localStorage.length <= 1) {
+            ResetBooks();
+        }
+        UpdateBookList();
+        
+        function ReadInput(input) {
+            //if is student id
+            if (input.length == 5 && !isNaN(input)) {
+                textBox.value = "";
+                storedId = input;
+                topText.textContent = storedId + ", scan a book to check out";
+            //check for book 
+            } else if (isNaN(input)) {
+                for (var key in localStorage) {
+                    //if matches book name
+                    if (key.toLowerCase() == input) {
+                        //returning book
+                        if (storedId == "") {
+                            if (localStorage.getItem(key) == "in packard") {
+                                topText.textContent = key + " is already in packard";
+                                storedId = "";
+                                textBox.value = "";
+                                setTimeout(function(){ topText.textContent = "Scan your student ID or type it in here:"; }, 1000);
+                            } else {
+                                //book is returned
+                                localStorage.setItem(key, "in packard");
+                                textBox.value = "";
+                                topText.textContent = key + " has been returned";
+                                setTimeout(function(){ topText.textContent = "Scan your student ID or type it in here:"; }, 1000);
+                                UpdateBookList();
+                                return;   
+                            }
+                        //else you must be checking out a book
+                        } else {
+                            //sucess!
+                            if ("in packard" == localStorage.getItem(key)) {
+                                localStorage.setItem(key, storedId);
+                                topText.textContent = key.toString() + " has been checked out by " + storedId;
+                                storedId = "";
+                                textBox.value = "";
+                                setTimeout(function(){ topText.textContent = "Scan your student ID or type it in here:"; }, 1000);
+                                inputType = true;
+                                UpdateBookList();
+                                return;
+                            //book is not able to be checked out
+                            } else {
+                                topText.textContent = "That book is already checked out.";
+                                textBox.value = "";
+                                storedId = "";
+                                setTimeout(function(){topText.textContent = "Scan your student ID or type it in here:"}, 1000);
+                                return;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        function ReadInputCommand(input) {
+            switch (input.toLowerCase()) {
+                case "clear":
+                    localStorage.clear();
+                    topText.textContent = "Local cache deleted, refreshing the browser will create another cache.";
+                    setTimeout(function(){ topText.textContent = "Thanks for trying this out! Goodbye!"; }, 1000);
+                break;
+                case "reset":
+                    ResetBooks();
+                    topText.textContent = "All books returned";
+                    setTimeout(function(){ topText.textContent = "Scan your student ID or type it in here"; }, 1000);
+                break;
+                case "help":
+                    topText.textContent = "Here is a list of commands, type in a command and press enter to execute.\n.Reset: sets all books as in Packard\n.Clear:Delete the PepScan data stored on this machine. If this page is opened again, a new cache will be created";
+                break;
+            }
+            storedId = "";
+        }
+        
+        function UpdateBookList() {
+            bookList.innerHTML = "";
+            for (var key in localStorage) {
+                bookList.innerHTML += key + ": " + localStorage.getItem(key) + "<br>";
+            }
+        }
+        
+        function ResetBooks() {
+            
+            localStorage.clear();
+            
+            localStorage.Tpt1_1 = "in packard";
+            localStorage.Tpt1_2 = "in packard";
+            localStorage.Tpt1_3 = "in packard";
+            
+            localStorage.Tpt2_1 = "in packard";
+            localStorage.Tpt2_2 = "in packard";
+            localStorage.Tpt2_3 = "in packard";
+            
+            localStorage.Tpt3_1 = "in packard";
+            localStorage.Tpt3_2 = "in packard";
+            localStorage.Tpt3_3 = "in packard";
+            
+            UpdateBookList();
+        }
+        
+        window.onload = function() {
+            textBox.focus();
+        };
+    </script>
+    
+</html>

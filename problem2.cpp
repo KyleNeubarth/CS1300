@@ -20,6 +20,7 @@ int main() {
     cin >> airTemp;
     cout << "\nEnter wind speed:";
     cin >> wSpeed;
-    cout << "\n";
-    windChillCalculator(airTemp,wSpeed);
+    cout << "\n" << windChillCalculator(airTemp,wSpeed) << "\n";
+    printWindChill(30,5,10,1);
+    ;
 }

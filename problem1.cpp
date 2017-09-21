@@ -2,36 +2,38 @@
 
 using namespace std;
 
-void story1();
-void story2();
-void story3();
+void menu(void);
+void story1(void);
+void story2(void);
+void story3(void);
 
-void menu() {
+int main() {
+    menu();
+}
+
+void menu(void) {
     bool running = true;
     while (running) {
-        cout << ""Which story would you like to play? Enter the number of the story (1, 2, or 3) or type q to quit: ";
+        cout << "Which story would you like to play? Enter the number of the story (1, 2, or 3) or type q to quit: ";
         string input;
         cin >> input;
-        switch (input) {
-            case "1":
-                story1();
-            break;
-            case "2":
-                story2();
-            break;
-            case "3":
-                story3();
-            break;
-            case "q":
-                cout << "good bye";
-                running = false;
-            break;
+        if (input == "1") {
+            story1();
+        } else if (input == "2") {
+            story2();
+        } else if (input == "3") {
+            story3();
+        } else if (input == "q") {
+            cout << "good bye";
+            running = false;
+        } else {
+          cout << "Valid choice not selected.";
         }
     }
     return;
 }
 
-void story1() {
+void story1(void) {
     string pluralNoun;
     string occupation;
     string animal;
@@ -46,21 +48,21 @@ void story1() {
     cout << "Enter a place:\n";
     cin >> place;
     
-    cout << "In the book War of the "<<pluralNoun<<", the main character is an anonymous "<<ocupation<<" who records the arrival of the "<<animal<<"s in "<<place<<".";
+    cout << "In the book War of the "<<pluralNoun<<", the main character is an anonymous "<<occupation<<" who records the arrival of the "<<animal<<"s in "<<place<<".\n";
     return;
 }
-void story2() {
+void story2(void) {
     string name;
     string stateCountry;
     
-    cout << "Enter a name:\n"
+    cout << "Enter a name:\n";
     cin >> name;
-    cout << "Enter a state/country:\n"
+    cout << "Enter a state/country:\n";
     cin >> stateCountry;
-    cout << name << ", I've got a feeling we're not in " << stateCountry << " anymore.";
+    cout << name << ", I've got a feeling we're not in " << stateCountry << " anymore.\n";
     return;
 }
-void story3() {
+void story3(void) {
     string firstName;
     string relative;
     string verb;
@@ -71,6 +73,6 @@ void story3() {
     cin >> relative;
     cout << "Enter a verb";
     cin >> verb;
-    cout << "Hello. My name is "<<firstName<<". You killed my "<<relative<<".Perpare to "<<verb<<".";
+    cout << "Hello. My name is "<<firstName<<". You killed my "<<relative<<".Perpare to "<<verb<<".\n";
     return;
 }
