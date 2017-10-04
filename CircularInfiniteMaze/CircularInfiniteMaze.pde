@@ -14,8 +14,9 @@ class Cell {
 
 ArrayList<Cell[]> maze;
 float time;
+float timeUndo = 0;
 
-float startTime = 0;
+float startTime = 1;
 float timer = 1;
 
 float z;
@@ -29,7 +30,7 @@ void setup() {
 }
 
 void draw() {
-  time = millis()/1000f;
+  time = millis()/1000f - timeUndo;
   if (timer+startTime <= time) {
     GenerateRow();
     startTime = time;
@@ -61,6 +62,14 @@ void DrawMaze() {
   for (int i=0;i<maze.size();i++) {
     float w = (1/( constrain(.001f*(time-(i)-z),0,10000) ) );
     float w2 = (1/( constrain(.001f*(time-((i+1))-z),0,10000) ) );
+    if (w < width/16) {
+      maze.remove(i);
+      timeUndo+=timer;
+      startTime-=timer;
+      time = millis()/1000f - timeUndo;
+      w = (1/( constrain(.001f*(time-(i)-z),0,10000) ) );
+      w2 = (1/( constrain(.001f*(time-((i+1))-z),0,10000) ) );
+    }
     for (int h=0;h<maze.get(i).length;h++) {
       if (maze.get(i)[h].cl) {
         line(cos((float)h/maze.get(i).length*(PI*2))*w,sin((float)h/maze.get(i).length*(PI*2))*w,cos((float)h/maze.get(i).length*(PI*2))*w2,sin((float)h/maze.get(i).length*(PI*2))*w2);
