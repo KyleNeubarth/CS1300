@@ -24,7 +24,7 @@ float z;
 void setup() {
   maze = new ArrayList<Cell[]>();
   GenerateEmptyRow();
-  size(600,600);
+  size(600,600,P2D);
   background(255);
   z = 5000/pow(width/4,2);
 }
@@ -33,7 +33,7 @@ void draw() {
   time = millis()/1000f - timeUndo;
   if (timer+startTime <= time) {
     GenerateRow();
-    startTime = time;
+    startTime = startTime + timer;
   }
   
   
