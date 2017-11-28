@@ -1,0 +1,37 @@
+A Presentation and Brief Explanation of Conway's Game of Life
+Kyle Neubarth, CSCI 1300 Assignment 8
+
+
+_IMPORTANT_
+Patterns are broken right now! They are not printing correctly, I am currently working on the problem but if it has not been fixed, email me at kyne7959@colorado.edu. Broken patterns means:
+-when I print set patterns, they are distorted and do not look correct
+-simulations where I paste set patterns will not work correctly
+Program will still run!
+
+structure of presentation:
+-intro, run the simulation until it reaches ground state, it looks cool.
+-explanation, introduce the project and explain the rules of the algorithm
+-interaction, run a simulation, let user increment frames at their own speed so they can see the rules in action
+*explaining patterns
+-still lifes, talk about how Life reaches a ground state or stable patterns, print list of still lifes
+-oscilators, talk about the oscilator patterns, list them
+-flying machines, run a simulation with a glider! Explain flying machines and list them
+*wrap up
+
+Classes:
+
+LifeAlgorithm:
+holds a grid of bools that represent cells
+Can execute rules on itself(DoTick)
+Can seed itself with random value
+Basically is the algorithm that other classes interact with
+
+PatternSpotter:
+-Disclaimer no longer spots patterns-
+holds an array of pattern objects, read from a file.
+can print a pattern onto the console
+can paste a pattern onto a grid (LifeAlgorithm.grid)
+
+Pattern:
+simply a pattern, max size of 10x10
+has a 2d array of bool, width of pattern, and height
